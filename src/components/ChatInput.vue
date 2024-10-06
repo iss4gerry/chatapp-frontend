@@ -1,23 +1,35 @@
 <template>
 	<div
-		class="grid items-center grid-cols-[5%_95%] bg-[#080420] px-8 md:px-4 gap-4"
+		class="min-h-[6vh] flex flex-row justify-center items-center bg-[#36393e]"
 	>
-		<!-- Emoji Picker Button -->
-		<div class="button-container flex items-center text-white gap-4"></div>
-
-		<!-- Input Form -->
-		<form
-			class="input-container w-full flex items-center gap-8 bg-[#ffffff34] rounded-full"
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			class="mr-2"
 		>
-			<input
-				type="text"
-				placeholder="type your message here"
-				class="w-[90%] h-[60%] bg-transparent text-white border-none pl-4 text-xl placeholder:text-white focus:outline-none"
+			<path
+				d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3.5 8c.828 0 1.5.671 1.5 1.5s-.672 1.5-1.5 1.5-1.5-.671-1.5-1.5.672-1.5 1.5-1.5zm-7 0c.828 0 1.5.671 1.5 1.5s-.672 1.5-1.5 1.5-1.5-.671-1.5-1.5.672-1.5 1.5-1.5zm3.501 10c-2.801 0-4.874-1.846-6.001-3.566l.493-.493c1.512 1.195 3.174 1.931 5.508 1.931 2.333 0 3.994-.736 5.506-1.931l.493.493c-1.127 1.72-3.199 3.566-5.999 3.566z"
+				fill="white"
 			/>
-			<button
-				type="submit"
-				class="bg-[#9a86f3] text-white flex justify-center items-center py-1 px-8 rounded-full"
-			></button>
-		</form>
+		</svg>
+		<input
+			type="text"
+			placeholder="Type here"
+			class="input input-bordered input-sm w-full max-w-3xl bg-[#424549] text-white"
+		/>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="25"
+			height="25"
+			viewBox="0 0 24 24"
+			class="ml-2"
+		>
+			<path
+				d="M23 0l-4.5 16.5-6.097-5.43 5.852-6.175-7.844 5.421-5.411-1.316 18-9zm-11 12.501v5.499l2.193-3.323-2.193-2.176zm-8.698 6.825l-1.439-.507 5.701-5.215 1.436.396-5.698 5.326zm3.262 4.287l-1.323-.565 4.439-4.503 1.32.455-4.436 4.613zm-4.083.387l-1.481-.507 8-7.89 1.437.397-7.956 8z"
+				fill="white"
+			/>
+		</svg>
 	</div>
 </template>
