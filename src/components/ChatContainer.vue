@@ -19,12 +19,55 @@ import ChatInput from './ChatInput.vue';
 		</div>
 
 		<div class="chat-messages flex flex-col gap-4 p-4 overflow-auto">
-			<div class="message flex items-center">
-				<div
-					class="content max-w-[40%] md:max-w-[70%] break-words p-4 text-lg rounded-lg text-[#d1d1d1]"
-				>
-					<p></p>
+			<div class="chat chat-start">
+				<div class="chat-bubble">
+					It's over Anakin,
+					<br />
+					I have the high ground.
 				</div>
+			</div>
+			<div class="chat chat-end">
+				<div class="chat-bubble">You underestimate my power!</div>
+			</div>
+			<div class="chat chat-start">
+				<div class="chat-bubble">
+					It's over Anakin,
+					<br />
+					I have the high ground.
+				</div>
+			</div>
+			<div class="chat chat-end">
+				<div class="chat-bubble">You underestimate my power!</div>
+			</div>
+			<div class="chat chat-start">
+				<div class="chat-bubble">
+					It's over Anakin,
+					<br />
+					I have the high ground.
+				</div>
+			</div>
+			<div class="chat chat-end">
+				<div class="chat-bubble">You underestimate my power!</div>
+			</div>
+			<div class="chat chat-start">
+				<div class="chat-bubble">
+					It's over Anakin,
+					<br />
+					I have the high ground.
+				</div>
+			</div>
+			<div class="chat chat-end">
+				<div class="chat-bubble">You underestimate my power!</div>
+			</div>
+			<div class="chat chat-start">
+				<div class="chat-bubble">
+					It's over Anakin,
+					<br />
+					I have the high ground.
+				</div>
+			</div>
+			<div class="chat chat-end">
+				<div class="chat-bubble">You underestimate my power!</div>
 			</div>
 		</div>
 
