@@ -1,0 +1,24 @@
+@tailwind base;
+
+@layer base {
+	main {
+		@apply text-accent;
+	}
+	html {
+		scroll-behavior: smooth;
+	}
+	.btn {
+		@apply hover:bg-black;
+	}
+}
+
+@tailwind components;
+@layer components {
+	.btn {
+		@apply hover:bg-black;
+		@apply disabled:bg-gray-500;
+		@apply disabled:text-slate-300;
+	}
+}
+
+@tailwind utilities;
