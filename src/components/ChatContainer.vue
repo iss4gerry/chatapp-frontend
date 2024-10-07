@@ -1,13 +1,58 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue';
 import ChatInput from './ChatInput.vue';
+import axios from '../api/index';
+import { Response } from '../types/Friend';
+import { Message, NewMessagePayload, RoomResponse } from '../types/Message';
 
-const chats = ref<string[]>([]);
+const chats = ref<{ senderId: string; message: string }[]>([]);
 const scrollTarget = ref<HTMLElement | null>(null);
+const userId = localStorage.getItem('userId')?.trimEnd();
+const props = defineProps(['friendId']);
+import { io } from 'socket.io-client';
 
-const sendMessage = (message: string) => {
-	chats.value.push(message);
+const socket = io('ws://localhost:3000');
+
+const sendMessage = async (message: string) => {
+	const roomId = `${[userId, props.friendId].sort().join('')}`;
+	// await axios.post<Response<RoomResponse>>(
+	// 	'http://localhost:3000/message/room/add',
+	// 	{
+	// 		roomId: roomId,
+	// 		user1Id: userId,
+	// 		user2Id: props.friendId,
+	// 	}
+	// );
+
+	socket.emit('joinRoom', roomId);
+
+	sendContent({
+		roomId,
+		senderId: userId!,
+		content: message,
+	});
+
+	chats.value.push({
+		senderId: userId!,
+		message: message,
+	});
+	console.log(chats.value);
 };
+
+function sendContent(payload: NewMessagePayload) {
+	socket.emit('sendMessage', payload);
+}
+
+socket.on('newMessage', (message: Message) => {
+	console.log('Pesan baru diterima:', message);
+	if (message.senderId === props.friendId) {
+		chats.value.push({
+			senderId: message.senderId,
+			message: message.content,
+		});
+	}
+});
+
 watch(chats.value, async () => {
 	await nextTick();
 
@@ -39,14 +84,16 @@ watch(chats.value, async () => {
 		<div
 			class="chat-messages flex flex-col gap-4 p-4 overflow-auto bg-[#424549] max-h-[71vh] min-h-[71vh] overflow-y-scroll"
 		>
-			<div class="chat chat-start">
-				<div class="chat-bubble bg-[#282b30] text-white">
-					That's never been done in the history of the Jedi. It's insulting!
-				</div>
-			</div>
-			<div class="chat chat-end" v-for="(chat, index) in chats" :key="index">
-				<div class="chat-bubble bg-[#36393e] text-white">
-					{{ chat }}
+			<div v-for="(chat, index) in chats" :key="index">
+				<div
+					:class="[
+						'chat',
+						chat.senderId === userId ? 'chat-end' : 'chat-start',
+					]"
+				>
+					<div class="chat-bubble bg-[#36393e] text-white">
+						{{ chat.message }}
+					</div>
 				</div>
 			</div>
 			<div ref="scrollTarget"></div>

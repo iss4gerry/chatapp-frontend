@@ -3,9 +3,10 @@ import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import { FriendList, Response } from '../types/Friend';
 
-const userId = 'b8196715-1177-4b4a-86cd-3fe266d163c0';
+const userId = localStorage.getItem('userId')?.trimEnd();
 const friendId = ref<string>('');
 const friendList = ref<FriendList[]>();
+const emit = defineEmits(['send-friendId']);
 
 const fetchFriendList = async () => {
 	const { data } = await axios.get<Response<FriendList[]>>(
@@ -17,7 +18,7 @@ const fetchFriendList = async () => {
 
 const friendData = (id: string) => {
 	friendId.value = id;
-	console.log(friendId.value);
+	emit('send-friendId', friendId.value);
 };
 
 onMounted(() => {
