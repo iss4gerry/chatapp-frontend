@@ -9,10 +9,10 @@
 		</div>
 
 		<div
-			class="flex flex-col min-h-[71vh] max-h-[70vh] min-w-full bg-[#36393e] items-center overflow-y-auto"
+			class="flex flex-col min-h-[71vh] max-h-[70vh] min-w-full bg-[#36393e] items-center overflow-y-scroll"
 		>
 			<div
-				class="flex flex-row p-3 bg-[#424549] max-h-[10vh] min-h-[10vh] max-w-[54vh] min-w-[54vh] mt-4 -ml-3 items-center rounded-xl"
+				class="flex flex-row p-3 bg-[#424549] max-h-[10vh] min-h-[10vh] max-w-[54vh] min-w-[54vh] mt-4 items-center rounded-xl"
 			>
 				<img
 					src="https://api.multiavatar.com/Binx Bond.svg"

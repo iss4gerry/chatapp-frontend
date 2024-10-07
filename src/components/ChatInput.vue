@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const message = ref('');
+const emit = defineEmits(['message']);
+
+const sendMessage = () => {
+	if (message.value.trim()) {
+		emit('message', message.value);
+		message.value = '';
+	}
+};
+</script>
+
 <template>
 	<div
 		class="min-h-[6vh] flex flex-row justify-center items-center bg-[#36393e]"
@@ -15,11 +29,13 @@
 			/>
 		</svg>
 		<input
+			v-model="message"
 			type="text"
 			placeholder="Type here"
 			class="input input-bordered input-sm w-full max-w-3xl bg-[#424549] text-white"
 		/>
 		<svg
+			@click="sendMessage"
 			xmlns="http://www.w3.org/2000/svg"
 			width="25"
 			height="25"
