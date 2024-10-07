@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { io } from 'socket.io-client';
 
 const message = ref('');
 const emit = defineEmits(['message']);
@@ -10,6 +11,14 @@ const sendMessage = () => {
 		message.value = '';
 	}
 };
+
+const socket = io('ws://localhost:3000');
+
+socket.emit('chat message', 'asd');
+
+socket.on('chat message', (msg) => {
+	console.log(msg);
+});
 </script>
 
 <template>
