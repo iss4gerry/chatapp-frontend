@@ -14,29 +14,37 @@ import { io } from 'socket.io-client';
 const socket = io('ws://localhost:3000');
 
 const sendMessage = async (message: string) => {
-	const roomId = `${[userId, props.friendId].sort().join('')}`;
-	// await axios.post<Response<RoomResponse>>(
-	// 	'http://localhost:3000/message/room/add',
-	// 	{
-	// 		roomId: roomId,
-	// 		user1Id: userId,
-	// 		user2Id: props.friendId,
-	// 	}
-	// );
+	try {
+		const roomId = `${[userId, props.friendId].sort().join('')}`;
+		const { data } = await axios.get<Response<RoomResponse>>(
+			`http://localhost:3000/message/room/${roomId}`
+		);
 
-	socket.emit('joinRoom', roomId);
+		if (data.data === null) {
+			await axios.post<Response<RoomResponse>>(
+				'http://localhost:3000/message/room/add',
+				{
+					roomId: roomId,
+					user1Id: userId,
+					user2Id: props.friendId,
+				}
+			);
+		}
 
-	sendContent({
-		roomId,
-		senderId: userId!,
-		content: message,
-	});
+		socket.emit('joinRoom', roomId);
 
-	chats.value.push({
-		senderId: userId!,
-		message: message,
-	});
-	console.log(chats.value);
+		sendContent({
+			roomId,
+			senderId: userId!,
+			content: message,
+		});
+
+		chats.value.push({
+			senderId: userId!,
+			message: message,
+		});
+		console.log(chats.value);
+	} catch (error) {}
 };
 
 function sendContent(payload: NewMessagePayload) {

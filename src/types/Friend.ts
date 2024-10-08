@@ -1,7 +1,7 @@
 export type Response<T> = {
 	status: number;
 	message: string;
-	data: T;
+	data?: T;
 };
 
 export type FriendList = {
