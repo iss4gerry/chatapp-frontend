@@ -8,7 +8,7 @@ import { Message, NewMessagePayload, RoomResponse } from '../types/Message';
 const chats = ref<{ senderId: string; message: string; dateTime: string }[]>(
 	[]
 );
-
+const friendStatus = ref<boolean>(false);
 const scrollTarget = ref<HTMLElement | null>(null);
 const userId = localStorage.getItem('userId')?.trimEnd();
 const props = defineProps<{
@@ -18,9 +18,12 @@ const props = defineProps<{
 
 const friendIdRef = toRef(props, 'friendId');
 const oldMessageRef = toRef(props, 'oldMessage');
+
 import { io } from 'socket.io-client';
 
-const socket = io('ws://localhost:3000');
+const socket = io('ws://localhost:3000', {
+	query: { userId },
+});
 
 const sendMessage = async (message: string) => {
 	try {
@@ -65,6 +68,24 @@ function sendContent(payload: NewMessagePayload) {
 	socket.emit('sendMessage', payload);
 }
 
+socket.on(
+	'userStatusUpdate',
+	(users: {
+		[key: string]: { online: boolean; lastOnline: string | null };
+	}) => {
+		for (const userId in users) {
+			const user = users[userId];
+			if (!user.online) {
+				if (userId === props.friendId) {
+					friendStatus.value = false;
+				}
+			} else {
+				friendStatus.value = true;
+			}
+		}
+	}
+);
+
 socket.on('newMessage', async (message: Message) => {
 	if (message.senderId === props.friendId) {
 		chats.value.push({
@@ -81,7 +102,7 @@ socket.on('newMessage', async (message: Message) => {
 
 function formatDateTime(date: Date) {
 	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+	const month = String(date.getMonth() + 1).padStart(2, '0');
 	const day = String(date.getDate()).padStart(2, '0');
 	const hours = String(date.getHours()).padStart(2, '0');
 	const minutes = String(date.getMinutes()).padStart(2, '0');
@@ -124,7 +145,9 @@ watch(oldMessageRef, async () => {
 				</div>
 				<div class="username flex flex-col">
 					<h3 class="text-white text-xl font-bold">TEsSS</h3>
-					<h4 class="text-sm text-white">last online 15 minute ago</h4>
+					<h4 class="text-sm text-gray-300">
+						{{ friendStatus === true ? 'Online' : 'Offline' }}
+					</h4>
 				</div>
 			</div>
 		</div>
