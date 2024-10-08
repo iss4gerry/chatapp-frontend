@@ -2,11 +2,12 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import { FriendList, Response } from '../types/Friend';
+import { Message } from '../types/Message';
 
 const userId = localStorage.getItem('userId')?.trimEnd();
 const friendId = ref<string>('');
 const friendList = ref<FriendList[]>();
-const emit = defineEmits(['send-friendId']);
+const emit = defineEmits(['send-friendId', 'send-older-message']);
 
 const fetchFriendList = async () => {
 	const { data } = await axios.get<Response<FriendList[]>>(
@@ -16,9 +17,16 @@ const fetchFriendList = async () => {
 	friendList.value = data.data;
 };
 
-const friendData = (id: string) => {
+const friendData = async (id: string) => {
 	friendId.value = id;
+
+	const roomId = `${[userId, friendId.value].sort().join('')}`;
 	emit('send-friendId', friendId.value);
+	const message = await axios.get<Response<Message[]>>(
+		`http://localhost:3000/message/${roomId}`
+	);
+
+	emit('send-older-message', message.data.data);
 };
 
 onMounted(() => {

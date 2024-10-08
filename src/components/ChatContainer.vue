@@ -1,14 +1,23 @@
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue';
+import { ref, watch, nextTick, toRef } from 'vue';
 import ChatInput from './ChatInput.vue';
 import axios from '../api/index';
 import { Response } from '../types/Friend';
 import { Message, NewMessagePayload, RoomResponse } from '../types/Message';
 
-const chats = ref<{ senderId: string; message: string }[]>([]);
+const chats = ref<{ senderId: string; message: string; dateTime: string }[]>(
+	[]
+);
+
 const scrollTarget = ref<HTMLElement | null>(null);
 const userId = localStorage.getItem('userId')?.trimEnd();
-const props = defineProps(['friendId']);
+const props = defineProps<{
+	friendId: string | undefined;
+	oldMessage: Message[] | undefined;
+}>();
+
+const friendIdRef = toRef(props, 'friendId');
+const oldMessageRef = toRef(props, 'oldMessage');
 import { io } from 'socket.io-client';
 
 const socket = io('ws://localhost:3000');
@@ -16,6 +25,17 @@ const socket = io('ws://localhost:3000');
 const sendMessage = async (message: string) => {
 	try {
 		const roomId = `${[userId, props.friendId].sort().join('')}`;
+
+		chats.value.push({
+			senderId: userId!,
+			message: message,
+			dateTime: formatDateTime(new Date()),
+		});
+		await nextTick();
+		if (scrollTarget.value) {
+			scrollTarget.value.scrollIntoView({ behavior: 'smooth' });
+		}
+		console.log(roomId);
 		const { data } = await axios.get<Response<RoomResponse>>(
 			`http://localhost:3000/message/room/${roomId}`
 		);
@@ -38,12 +58,6 @@ const sendMessage = async (message: string) => {
 			senderId: userId!,
 			content: message,
 		});
-
-		chats.value.push({
-			senderId: userId!,
-			message: message,
-		});
-		console.log(chats.value);
 	} catch (error) {}
 };
 
@@ -51,19 +65,44 @@ function sendContent(payload: NewMessagePayload) {
 	socket.emit('sendMessage', payload);
 }
 
-socket.on('newMessage', (message: Message) => {
-	console.log('Pesan baru diterima:', message);
+socket.on('newMessage', async (message: Message) => {
 	if (message.senderId === props.friendId) {
 		chats.value.push({
 			senderId: message.senderId,
 			message: message.content,
+			dateTime: formatDateTime(new Date()),
 		});
+		await nextTick();
+		if (scrollTarget.value) {
+			scrollTarget.value.scrollIntoView({ behavior: 'smooth' });
+		}
 	}
 });
 
+function formatDateTime(date: Date) {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+	const seconds = String(date.getSeconds()).padStart(2, '0');
+
+	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 watch(chats.value, async () => {
 	await nextTick();
+	if (scrollTarget.value) {
+		scrollTarget.value.scrollIntoView({ behavior: 'smooth' });
+	}
+});
 
+watch(friendIdRef, () => {
+	chats.value = [];
+});
+
+watch(oldMessageRef, async () => {
+	await nextTick();
 	if (scrollTarget.value) {
 		scrollTarget.value.scrollIntoView({ behavior: 'smooth' });
 	}
@@ -92,6 +131,18 @@ watch(chats.value, async () => {
 		<div
 			class="chat-messages flex flex-col gap-4 p-4 overflow-auto bg-[#424549] max-h-[71vh] min-h-[71vh] overflow-y-scroll"
 		>
+			<div v-for="(chat, index) in oldMessage" :key="index">
+				<div
+					:class="[
+						'chat',
+						chat.senderId === userId ? 'chat-end' : 'chat-start',
+					]"
+				>
+					<div class="chat-bubble bg-[#36393e] text-white">
+						{{ chat.content }}
+					</div>
+				</div>
+			</div>
 			<div v-for="(chat, index) in chats" :key="index">
 				<div
 					:class="[
