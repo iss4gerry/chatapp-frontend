@@ -15,9 +15,10 @@
 @tailwind components;
 @layer components {
 	.btn {
-		@apply hover:bg-black;
-		@apply disabled:bg-gray-500;
-		@apply disabled:text-slate-300;
+		@apply hover:bg-[#282b30];
+		@apply hover:border-[#282b30];
+		@apply disabled:bg-[#282b30];
+		@apply disabled:text-white;
 	}
 }
 

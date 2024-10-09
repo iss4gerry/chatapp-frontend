@@ -129,7 +129,10 @@ watch(oldMessageRef, async () => {
 </script>
 
 <template>
-	<div class="flex flex-col min-w-[60vw]" v-if="props.friendId">
+	<div
+		class="flex flex-col min-w-[60vw] xl:h-screen w-[75vw]"
+		v-if="props.friendId"
+	>
 		<div
 			class="chat-header flex justify-between items-center px-8 min-h-[8vh] max-h-[8vh] bg-[#36393e]"
 		>
@@ -142,7 +145,7 @@ watch(oldMessageRef, async () => {
 					/>
 				</div>
 				<div class="username flex flex-col">
-					<h3 class="text-white text-xl font-bold">
+					<h3 class="text-white text-xl font-semibold">
 						{{ '@' + friendUsername }}
 					</h3>
 					<h4 class="text-sm text-gray-300">
@@ -152,7 +155,7 @@ watch(oldMessageRef, async () => {
 			</div>
 		</div>
 		<div
-			class="chat-messages flex flex-col gap-4 p-4 overflow-auto bg-[#424549] max-h-[71vh] min-h-[71vh] overflow-y-scroll"
+			class="chat-messages flex flex-col gap-4 p-4 overflow-auto bg-[#424549] h-[90vh] overflow-y-scroll"
 		>
 			<div v-for="(chat, index) in oldMessage" :key="index">
 				<div
@@ -184,7 +187,7 @@ watch(oldMessageRef, async () => {
 	</div>
 	<div
 		v-else
-		class="flex flex-col items-center justify-center bg-[#424549] min-w-[120vh] max-sm:hidden"
+		class="flex flex-col items-center justify-center bg-[#424549] min-w-[60vw] xl:h-screen w-[75vw]"
 	>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
