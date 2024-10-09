@@ -8,11 +8,14 @@ import { Message, NewMessagePayload, RoomResponse } from '../types/Message';
 const chats = ref<{ senderId: string; message: string; dateTime: string }[]>(
 	[]
 );
-const friendStatus = ref<boolean>(false);
+
+const friendStatus = ref<boolean>();
 const scrollTarget = ref<HTMLElement | null>(null);
 const userId = localStorage.getItem('userId')?.trimEnd();
 const props = defineProps<{
 	friendId: string | undefined;
+	friendName: string | undefined;
+	friendUsername: string | undefined;
 	oldMessage: Message[] | undefined;
 }>();
 
@@ -38,7 +41,6 @@ const sendMessage = async (message: string) => {
 		if (scrollTarget.value) {
 			scrollTarget.value.scrollIntoView({ behavior: 'smooth' });
 		}
-		console.log(roomId);
 		const { data } = await axios.get<Response<RoomResponse>>(
 			`http://localhost:3000/message/room/${roomId}`
 		);
@@ -75,12 +77,8 @@ socket.on(
 	}) => {
 		for (const userId in users) {
 			const user = users[userId];
-			if (!user.online) {
-				if (userId === props.friendId) {
-					friendStatus.value = false;
-				}
-			} else {
-				friendStatus.value = true;
+			if (users[props.friendId!]) {
+				friendStatus.value = user.online;
 			}
 		}
 	}
@@ -125,13 +123,13 @@ watch(friendIdRef, () => {
 watch(oldMessageRef, async () => {
 	await nextTick();
 	if (scrollTarget.value) {
-		scrollTarget.value.scrollIntoView({ behavior: 'smooth' });
+		scrollTarget.value.scrollIntoView();
 	}
 });
 </script>
 
 <template>
-	<div class="flex flex-col">
+	<div class="flex flex-col min-w-[120vh] max-sm:hidden" v-if="props.friendId">
 		<div
 			class="chat-header flex justify-between items-center px-8 min-h-[8vh] max-h-[8vh] bg-[#36393e]"
 		>
@@ -144,9 +142,11 @@ watch(oldMessageRef, async () => {
 					/>
 				</div>
 				<div class="username flex flex-col">
-					<h3 class="text-white text-xl font-bold">TEsSS</h3>
+					<h3 class="text-white text-xl font-bold">
+						{{ '@' + friendUsername }}
+					</h3>
 					<h4 class="text-sm text-gray-300">
-						{{ friendStatus === true ? 'Online' : 'Offline' }}
+						{{ friendStatus ? 'Online' : 'Offline' }}
 					</h4>
 				</div>
 			</div>
@@ -181,5 +181,26 @@ watch(oldMessageRef, async () => {
 			<div ref="scrollTarget"></div>
 		</div>
 		<ChatInput v-on:message="sendMessage" />
+	</div>
+	<div
+		v-else
+		class="flex flex-col items-center justify-center bg-[#424549] min-w-[120vh] max-sm:hidden"
+	>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="25"
+			height="25"
+			fill="white"
+			class="bi bi-chat-dots-fill"
+			viewBox="0 0 16 16"
+		>
+			<path
+				d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"
+			/>
+		</svg>
+		<h1 class="text-white mt-2 text-base font-semibold">No chat selected</h1>
+		<h1 class="text-slate-200 text-sm">
+			Select a conversation from the left menu
+		</h1>
 	</div>
 </template>

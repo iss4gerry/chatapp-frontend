@@ -1,10 +1,10 @@
-<script setup lang="ts">
-import Chat from './views/Chat.vue';
-</script>
+<script setup lang="ts"></script>
 
 <template>
-	<main class="flex flex-row justify-center items-center min-h-screen">
-		<Chat></Chat>
+	<main
+		class="flex flex-row justify-center items-center min-h-screen max-sm:min-h-full"
+	>
+		<router-view></router-view>
 	</main>
 </template>
 
