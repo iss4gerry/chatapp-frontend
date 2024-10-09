@@ -30,7 +30,7 @@ const sendOlderMessage = (message: Message[]) => {
 				v-on:send-older-message="sendOlderMessage"
 			/>
 			<ChatContainer
-				class="max-sm:hidden"
+				class="max-lg:hidden"
 				:friend-id="friendId"
 				:old-message="oldMessage"
 				:friend-name="friendName"

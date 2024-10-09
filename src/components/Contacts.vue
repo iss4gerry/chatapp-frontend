@@ -41,7 +41,7 @@ onMounted(() => {
 
 <template>
 	<div
-		class="flex flex-col overflow-hidden bg-[#282b30] w-[50vh] max-sm:bg-white max-sm:w-screen max-sm:h-screen"
+		class="flex flex-col overflow-hidden bg-[#282b30] w-[25vw] max-sm:bg-white max-sm:w-screen max-sm:h-screen max-lg:w-[90vw]"
 	>
 		<div
 			class="flex flex-row min-w-full max-w-full min-h-[8vh] max-h-[8vh] items-center justify-center bg-[#282b30]"
@@ -56,12 +56,12 @@ onMounted(() => {
 					@click="
 						friendData(item.friendId, item.friend.name, item.friend.username)
 					"
-					class="flex flex-row p-3 bg-[#424549] min-h-[10vh] lg:min-w-[46vh] mt-4 items-center rounded-xl max-sm:w-[90vw] max-sm:h-[10vh] max-md:w-[90vw]"
+					class="flex flex-row p-3 bg-[#424549] min-h-[10vh] lg:min-w-[22vw] mt-4 items-center rounded-xl max-sm:w-[90vw] max-sm:h-[10vh] max-md:w-[90vw] max-lg:w-[85vw] max-lg:h-[15vh]"
 				>
 					<img
 						src="https://api.multiavatar.com/Binx Bond.svg"
 						alt="ava"
-						class="lg:max-h-20 mr-10 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2"
+						class="lg:max-h-20 mr-10 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2 max-lg:h-[10vh]"
 					/>
 					<h1 class="text-white text-2xl font-bold max-sm:text-lg">
 						{{ item.friend.name }}

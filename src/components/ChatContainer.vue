@@ -129,7 +129,7 @@ watch(oldMessageRef, async () => {
 </script>
 
 <template>
-	<div class="flex flex-col min-w-[120vh] max-sm:hidden" v-if="props.friendId">
+	<div class="flex flex-col min-w-[60vw]" v-if="props.friendId">
 		<div
 			class="chat-header flex justify-between items-center px-8 min-h-[8vh] max-h-[8vh] bg-[#36393e]"
 		>
