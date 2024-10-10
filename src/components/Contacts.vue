@@ -69,6 +69,7 @@ const requestAddFrined = async () => {
 
 const searchFriend = async () => {
 	try {
+		addFriendLoading.value = true;
 		friendNotFound.value = false;
 		const { data } = await axios.get<Response<SearchFriend>>(
 			`http://localhost:3000/friend/search/${searchFriendId.value}`
@@ -79,7 +80,10 @@ const searchFriend = async () => {
 		} else {
 			searchFriendData.value = data.data;
 		}
-	} catch (error) {}
+	} catch (error) {
+	} finally {
+		addFriendLoading.value = false;
+	}
 };
 onMounted(() => {
 	fetchFriendList();
@@ -228,7 +232,7 @@ onMounted(() => {
 					class="flex flex-col items-center justify-center bg-[#36393e] h-full rounded-3xl"
 				>
 					<div
-						v-if="!friendNotFound"
+						v-if="!friendNotFound && !addFriendLoading"
 						class="flex flex-col justify-center items-center"
 					>
 						<img
@@ -258,6 +262,9 @@ onMounted(() => {
 								d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"
 							/>
 						</svg>
+					</div>
+					<div v-else-if="addFriendLoading">
+						<span class="loading loading-spinner loading-lg"></span>
 					</div>
 					<div v-else>
 						<h1 class="text-white text-lg">User not found</h1>
