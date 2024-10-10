@@ -7,13 +7,12 @@ import { io } from 'socket.io-client';
 
 const userId = localStorage.getItem('userId')?.trimEnd();
 const friendId = ref<string>('');
-const addFriendId = ref<string>();
+const addFriendStatus = ref<string>();
 const friendList = ref<FriendList[]>();
 const addFriendView = ref<boolean>(true);
 const searchFriendData = ref<SearchFriend>();
 const friendNotFound = ref<boolean>(false);
 const addFriendLoading = ref<boolean>(false);
-const addFrindStatus = ref<boolean>(false);
 const searchFriendId = ref<string>();
 const userInfo = ref<{
 	name: string;
@@ -54,17 +53,27 @@ const addFriend = () => {
 
 const requestAddFrined = async () => {
 	try {
+		if (
+			friendList.value?.map(
+				(ele) => ele.friendId === searchFriendData.value?.id
+			)
+		) {
+			addFriendStatus.value = 'You guys already friend';
+			return;
+		}
 		const { data } = await axios.post<Response<AddFriend>>(
 			`http://localhost:3000/friend/add`,
 			{
 				userId: userId,
-				friendId: addFriendId.value,
+				friendId: searchFriendData.value?.id,
 			}
 		);
 
 		if (data.status === 200) {
 		}
-	} catch (error) {}
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 const searchFriend = async () => {
@@ -230,6 +239,7 @@ onMounted(() => {
 			<div class="mt-5 w-[30vh] h-[25vh]">
 				<div
 					class="flex flex-col items-center justify-center bg-[#36393e] h-full rounded-3xl"
+					v-if="searchFriendData"
 				>
 					<div
 						v-if="!friendNotFound && !addFriendLoading"
@@ -246,7 +256,20 @@ onMounted(() => {
 						<h1 class="text-sm text-white">
 							{{ '@' + searchFriendData?.username }}
 						</h1>
+						<div v-if="searchFriendData.id === userId"></div>
+						<div
+							v-else-if="
+								addFriendStatus === 'This user is already on your friend list'
+							"
+						>
+							<h1 class="text-gray-300 text-xs">
+								{{ addFriendStatus }}
+							</h1>
+						</div>
+
 						<svg
+							v-else
+							@click="requestAddFrined"
 							xmlns="http://www.w3.org/2000/svg"
 							width="20"
 							height="20"
@@ -264,7 +287,7 @@ onMounted(() => {
 						</svg>
 					</div>
 					<div v-else-if="addFriendLoading">
-						<span class="loading loading-spinner loading-lg"></span>
+						<span class="loading loading-spinner loading-lg bg-white"></span>
 					</div>
 					<div v-else>
 						<h1 class="text-white text-lg">User not found</h1>
