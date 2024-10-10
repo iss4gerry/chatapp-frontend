@@ -9,15 +9,18 @@ const userId = localStorage.getItem('userId')?.trimEnd();
 const friendId = ref<string>('');
 const addFriendStatus = ref<string>();
 const friendList = ref<FriendList[]>();
-const addFriendView = ref<boolean>(true);
+const addFriendView = ref<boolean>(false);
 const searchFriendData = ref<SearchFriend>();
 const friendNotFound = ref<boolean>(false);
 const addFriendLoading = ref<boolean>(false);
 const searchFriendId = ref<string>();
+const pendingRequest = ref<FriendList[]>();
 const userInfo = ref<{
 	name: string;
 	username: string;
 }>();
+const activeTab = ref<string>('add');
+
 const socket = io('ws://localhost:3000', {
 	query: { userId },
 });
@@ -49,6 +52,27 @@ const friendData = async (id: string, friendName: string, username: string) => {
 
 const addFriend = () => {
 	addFriendView.value = true;
+};
+
+const changeActiveTab = (tab: string) => {
+	activeTab.value = tab;
+	getIncommingRequest();
+};
+
+const getIncommingRequest = async () => {
+	const { data } = await axios.get<Response<FriendList[]>>(
+		`http://localhost:3000/friend/pending/${userId}`
+	);
+
+	pendingRequest.value = data.data;
+};
+
+const accFriendRequest = async (id: string) => {
+	try {
+		const { data } = await axios.post(`http://localhost:3000/friend/acc`, {
+			id: id,
+		});
+	} catch (error) {}
 };
 
 const requestAddFrined = async () => {
@@ -198,100 +222,146 @@ onMounted(() => {
 					/>
 				</svg>
 			</div>
-			<div class="join">
-				<button
-					class="btn join-item bg-[#36393e] border-[#36393e] w-[15vh] font-normal text-white"
+			<div role="tablist" class="tabs tabs-boxed bg-[#36393e] w-[30vh]">
+				<a
+					role="tab"
+					class="tab text-white"
+					:class="{ 'tab-active': activeTab === 'add' }"
+					@click="changeActiveTab('add')"
+					><h1 class="text-xs">Connect with friend</h1></a
 				>
-					Connect with Friends
-				</button>
-				<button
-					class="btn join-item bg-[#36393e] border-[#36393e] font-normal w-[15vh] text-white"
-					disabled
+				<a
+					role="tab"
+					class="tab text-white"
+					:class="{ 'tab-active': activeTab === 'incomming' }"
+					@click="changeActiveTab('incomming')"
+					><h1 class="text-xs">Incomming Request</h1></a
 				>
-					Incomming Friend Request
-				</button>
 			</div>
-			<div class="flex flex-col">
-				<label
-					class="input input-bordered flex items-center gap-2 mt-3 w-[30vh]"
-				>
-					<input
-						v-model="searchFriendId"
-						type="text"
-						class="grow"
-						placeholder="Search"
-					/>
-					<svg
-						@click="searchFriend"
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 16 16"
-						fill="currentColor"
-						class="h-4 w-4 opacity-70 hover:cursor-pointer"
+			<div v-if="activeTab === 'add'">
+				<div class="flex flex-col">
+					<label
+						class="input input-bordered flex items-center gap-2 mt-3 w-[30vh]"
 					>
-						<path
-							fill-rule="evenodd"
-							d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-							clip-rule="evenodd"
+						<input
+							v-model="searchFriendId"
+							type="text"
+							class="grow"
+							placeholder="Search"
 						/>
-					</svg>
-				</label>
-			</div>
-			<div class="mt-5 w-[30vh] h-[25vh]">
-				<div
-					class="flex flex-col items-center justify-center bg-[#36393e] h-full rounded-3xl"
-					v-if="searchFriendData"
-				>
-					<div
-						v-if="!friendNotFound && !addFriendLoading"
-						class="flex flex-col justify-center items-center"
-					>
-						<img
-							src="https://api.multiavatar.com/Binx Bond.svg"
-							alt="ava"
-							class="lg:max-h-20 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2 max-lg:h-[10vh] w-[8vh]"
-						/>
-						<h1 class="text-lg font-semibold mt-2 text-white">
-							{{ searchFriendData?.name }}
-						</h1>
-						<h1 class="text-sm text-white">
-							{{ '@' + searchFriendData?.username }}
-						</h1>
-						<div v-if="searchFriendData.id === userId"></div>
-						<div
-							v-else-if="
-								addFriendStatus === 'This user is already on your friend list'
-							"
-						>
-							<h1 class="text-gray-300 text-xs">
-								{{ addFriendStatus }}
-							</h1>
-						</div>
-
 						<svg
-							v-else
-							@click="requestAddFrined"
+							@click="searchFriend"
 							xmlns="http://www.w3.org/2000/svg"
-							width="20"
-							height="20"
-							fill="white"
-							class="bi bi-person-plus-fill mt-5 hover:cursor-pointer"
 							viewBox="0 0 16 16"
+							fill="currentColor"
+							class="h-4 w-4 opacity-70 hover:cursor-pointer"
 						>
-							<path
-								d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"
-							/>
 							<path
 								fill-rule="evenodd"
-								d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"
+								d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+								clip-rule="evenodd"
 							/>
 						</svg>
+					</label>
+				</div>
+				<div class="mt-5 w-[30vh] h-[25vh]">
+					<div
+						class="flex flex-col items-center justify-center bg-[#36393e] h-full rounded-3xl"
+						v-if="searchFriendData"
+					>
+						<div
+							v-if="!friendNotFound && !addFriendLoading"
+							class="flex flex-col justify-center items-center"
+						>
+							<img
+								src="https://api.multiavatar.com/Binx Bond.svg"
+								alt="ava"
+								class="lg:max-h-20 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2 max-lg:h-[10vh] w-[8vh]"
+							/>
+							<h1 class="text-lg font-semibold mt-2 text-white">
+								{{ searchFriendData?.name }}
+							</h1>
+							<h1 class="text-sm text-white">
+								{{ '@' + searchFriendData?.username }}
+							</h1>
+							<div v-if="searchFriendData.id === userId"></div>
+							<div
+								v-else-if="
+									addFriendStatus === 'This user is already on your friend list'
+								"
+							>
+								<h1 class="text-gray-300 text-xs">
+									{{ addFriendStatus }}
+								</h1>
+							</div>
+
+							<svg
+								v-else
+								@click="requestAddFrined"
+								xmlns="http://www.w3.org/2000/svg"
+								width="20"
+								height="20"
+								fill="white"
+								class="bi bi-person-plus-fill mt-5 hover:cursor-pointer"
+								viewBox="0 0 16 16"
+							>
+								<path
+									d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"
+								/>
+								<path
+									fill-rule="evenodd"
+									d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"
+								/>
+							</svg>
+						</div>
+						<div v-else-if="addFriendLoading">
+							<span class="loading loading-spinner loading-lg bg-white"></span>
+						</div>
+						<div v-else>
+							<h1 class="text-white text-lg">User not found</h1>
+						</div>
 					</div>
-					<div v-else-if="addFriendLoading">
-						<span class="loading loading-spinner loading-lg bg-white"></span>
+				</div>
+			</div>
+			<div
+				v-else
+				v-for="(item, index) in pendingRequest"
+				:key="index"
+				class="min-h-[32vh] min-w-full flex-col mt-3 overflow-scroll overflow-y-scroll max-h-[31.2vh]"
+			>
+				<div
+					class="flex flex-row bg-[#36393e] p-2 justify-start items-center rounded-xl mt-2"
+				>
+					<img
+						src="https://api.multiavatar.com/Binx Bond.svg"
+						alt="ava"
+						class="h-[6vh]"
+					/>
+					<div class="flex flex-col w-[12vh]">
+						<h1 class="text-white ml-4 font-semibold opacity-95 text-sm">
+							{{ item.friend.name }} }
+						</h1>
+						<h1 class="text-gray-200 ml-4 font-semibold opacity-95 text-xs">
+							{{ item.friend.username }}
+						</h1>
 					</div>
-					<div v-else>
-						<h1 class="text-white text-lg">User not found</h1>
-					</div>
+					<svg
+						@click="accFriendRequest(item.id)"
+						xmlns="http://www.w3.org/2000/svg"
+						width="23"
+						height="23"
+						fill="white"
+						class="bi bi-person-plus-fill ml-12 hover:cursor-pointer"
+						viewBox="0 0 16 16"
+					>
+						<path
+							d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"
+						/>
+						<path
+							fill-rule="evenodd"
+							d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"
+						/>
+					</svg>
 				</div>
 			</div>
 		</div>
