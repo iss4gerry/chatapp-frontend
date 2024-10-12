@@ -82,7 +82,7 @@ const loginButton = async () => {
 	}
 };
 function generateRandomGuestName() {
-	const randomNumber = Math.floor(Math.random() * 10000); // Angka acak 0-999
+	const randomNumber = Math.floor(Math.random() * 10000);
 
 	return `Guest_${randomNumber}`;
 }
@@ -129,12 +129,12 @@ const loginAsGuest = async () => {
 					:class="{ 'animate__fadeOutUp animate__delay-s': alertStatus }"
 					v-if="wrongPassword"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						class="h-6 w-6 shrink-0 stroke-current"
-						fill="none"
-						viewBox="0 0 24 24"
-					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							class="h-6 w-6 shrink-0 stroke-current"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -170,7 +170,7 @@ const loginAsGuest = async () => {
 			</div>
 			<div class="card-body max-sm:w-[44vh] backdrop-blur-sm mt-10">
 				<div class="flex flex-col justify-center items-center space-y-4 w-full">
-					<h2 class="text-2xl font-semibold">Login</h2>
+					<h2 class="text-2xl font-semibold text-white">Login</h2>
 					<label class="input input-bordered flex items-center gap-2">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -213,7 +213,7 @@ const loginAsGuest = async () => {
 						/>
 					</label>
 					<button
-						class="btn w-[31vh] bg-accent text-gray-50"
+						class="btn w-[31vh] bg-[#424549] border-[#424549] text-gray-50"
 						:disabled="loginRequest"
 						@click="loginButton"
 					>
@@ -228,26 +228,26 @@ const loginAsGuest = async () => {
 					</button>
 					<div class="flex flex-row w-[30vh] justify-between">
 						<div class="flex flex-row justify-center items-center">
-							<input type="checkbox" class="checkbox w-3 h-3 mr-1" />
-							<p class="text-xs">Remember me</p>
+							<input type="checkbox" class="checkbox w-3 h-3 mr-1 bg-white" />
+							<p class="text-xs text-white">Remember me</p>
 						</div>
-						<a href="#" class="text-xs">Forgot Password</a>
+						<a href="#" class="text-xs text-white">Forgot Password</a>
 					</div>
 					<div class="flex flex-row items-center justify-center">
-						<p class="text-xs mr-1">Dont have an account?</p>
+						<p class="text-xs mr-1 text-white">Dont have an account?</p>
 						<router-link
 							to="register"
-							class="text-xs font-semibold text-gray-500"
+							class="text-xs font-semibold text-gray-300"
 							>Register</router-link
 						>
 					</div>
-					<div class="divider text-xs">Or sign with</div>
+					<div class="divider text-xs text-white">Or sign with</div>
 					<div class="flex flex-row flex-wrap w-[30vh] justify-between">
-						<button class="btn w-[14vh] bg-accent text-gray-50" disabled="true">
+						<button class="btn w-[14vh] bg-[#424549] border-[#424549] text-gray-50" >
 							Google
 						</button>
 						<button
-							class="btn w-[14vh] bg-accent text-gray-50"
+							class="btn w-[14vh] bg-[#424549] border-[#424549] text-gray-50"
 							:disabled="loginGuestRequest"
 							@click="loginAsGuest"
 						>
