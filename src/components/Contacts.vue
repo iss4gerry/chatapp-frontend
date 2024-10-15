@@ -31,6 +31,10 @@ const fetchFriendList = async () => {
 		`http://localhost:3000/friend/list/${userId}`
 	);
 
+	if (data.data?.length === 0) {
+		return;
+	}
+
 	if (data.data) {
 		friendList.value = data.data;
 		userInfo.value = data.data[0].user;

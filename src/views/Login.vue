@@ -63,11 +63,13 @@ const loginButton = async () => {
 
 			localStorage.setItem('token', bearerToken);
 			localStorage.setItem('userId', userId.value);
+
+			router.push('/')
 		}
 	} catch (error: any) {
 		if (error.response) {
 			const { status } = error.response.data;
-			if (status === 401) {
+			if (status === 400) {
 				wrongPassword.value = true;
 			} else {
 				console.log('Internal server error please try again');
@@ -120,7 +122,7 @@ const loginAsGuest = async () => {
 </script>
 
 <template>
-	<div class="flex justify-center items-center w-min-screen h-[80vh] -mt-10">
+	<div class="flex justify-center items-center w-screen h-screen ">
 		<div class="card text-primary-content h-[50vh]">
 			<div class="max-sm:flex max-sm:justify-center max-sm:items-center">
 				<div
@@ -265,4 +267,5 @@ const loginAsGuest = async () => {
 			</div>
 		</div>
 	</div>
+
 </template>
