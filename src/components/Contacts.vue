@@ -83,6 +83,8 @@ const accFriendRequest = async (id: string) => {
 		const { data } = await axios.patch(`http://localhost:3000/friend/accept`, {
 			id: id,
 		});
+
+		await fetchFriendList();
 	} catch (error) {}
 };
 
@@ -106,7 +108,6 @@ const requestAddFrined = async () => {
 		);
 
 		if (data.status === 200) {
-			console.log('success');
 		}
 	} catch (error) {
 		console.log(error);
@@ -336,45 +337,46 @@ onMounted(() => {
 					</div>
 				</div>
 			</div>
-			<div
-				v-else
-				v-for="(item, index) in pendingRequest"
-				:key="index"
-				class="min-h-[32vh] min-w-full flex-col mt-3 overflow-scroll overflow-y-scroll max-h-[31.2vh]"
-			>
+			<div v-else class="h-[33.3vh]">
 				<div
-					class="flex flex-row bg-[#36393e] p-2 justify-start items-center rounded-xl mt-2"
+					v-for="(item, index) in pendingRequest"
+					:key="index"
+					class="min-h-[32vh] min-w-full flex-col mt-3 overflow-scroll overflow-y-scroll max-h-[31.2vh]"
 				>
-					<img
-						src="https://api.multiavatar.com/Binx Bond.svg"
-						alt="ava"
-						class="h-[6vh]"
-					/>
-					<div class="flex flex-col w-[12vh]">
-						<h1 class="text-white ml-4 font-semibold opacity-95 text-sm">
-							{{ item.friend.name }} }
-						</h1>
-						<h1 class="text-gray-200 ml-4 font-semibold opacity-95 text-xs">
-							{{ item.friend.username }}
-						</h1>
-					</div>
-					<svg
-						@click="accFriendRequest(item.id)"
-						xmlns="http://www.w3.org/2000/svg"
-						width="23"
-						height="23"
-						fill="white"
-						class="bi bi-person-plus-fill ml-12 hover:cursor-pointer"
-						viewBox="0 0 16 16"
+					<div
+						class="flex flex-row bg-[#36393e] p-2 justify-start items-center rounded-xl mt-2"
 					>
-						<path
-							d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"
+						<img
+							src="https://api.multiavatar.com/Binx Bond.svg"
+							alt="ava"
+							class="h-[6vh]"
 						/>
-						<path
-							fill-rule="evenodd"
-							d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"
-						/>
-					</svg>
+						<div class="flex flex-col w-[12vh]">
+							<h1 class="text-white ml-4 font-semibold opacity-95 text-sm">
+								{{ item.friend.name }} }
+							</h1>
+							<h1 class="text-gray-200 ml-4 font-semibold opacity-95 text-xs">
+								{{ item.friend.username }}
+							</h1>
+						</div>
+						<svg
+							@click="accFriendRequest(item.id)"
+							xmlns="http://www.w3.org/2000/svg"
+							width="23"
+							height="23"
+							fill="white"
+							class="bi bi-person-plus-fill ml-12 hover:cursor-pointer"
+							viewBox="0 0 16 16"
+						>
+							<path
+								d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"
+							/>
+							<path
+								fill-rule="evenodd"
+								d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"
+							/>
+						</svg>
+					</div>
 				</div>
 			</div>
 		</div>
