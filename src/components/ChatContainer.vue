@@ -118,6 +118,8 @@ watch(chats.value, async () => {
 
 watch(friendIdRef, () => {
 	chats.value = [];
+	const roomId = `${[userId, props.friendId].sort().join('')}`;
+	socket.emit('joinRoom', roomId);
 });
 
 watch(oldMessageRef, async () => {
