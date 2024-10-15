@@ -75,11 +75,12 @@ const getIncommingRequest = async () => {
 	);
 
 	pendingRequest.value = data.data;
+	console.log(pendingRequest.value);
 };
 
 const accFriendRequest = async (id: string) => {
 	try {
-		const { data } = await axios.post(`http://localhost:3000/friend/acc`, {
+		const { data } = await axios.patch(`http://localhost:3000/friend/accept`, {
 			id: id,
 		});
 	} catch (error) {}
@@ -92,7 +93,8 @@ const requestAddFrined = async () => {
 				(ele) => ele.friendId === searchFriendData.value?.id
 			)
 		) {
-			addFriendStatus.value = 'You guys already friend';
+			addFriendStatus.value = 'This user is already on your friend list';
+			console.log(addFriendStatus.value);
 			return;
 		}
 		const { data } = await axios.post<Response<AddFriend>>(
@@ -104,6 +106,7 @@ const requestAddFrined = async () => {
 		);
 
 		if (data.status === 200) {
+			console.log('success');
 		}
 	} catch (error) {
 		console.log(error);
