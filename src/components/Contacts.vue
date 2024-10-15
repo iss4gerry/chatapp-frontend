@@ -4,6 +4,7 @@ import { onMounted, ref } from 'vue';
 import { AddFriend, FriendList, Response, SearchFriend } from '../types/Friend';
 import { Message } from '../types/Message';
 import { io } from 'socket.io-client';
+import { LoginResponse } from '../types/Auth';
 
 const userId = localStorage.getItem('userId')?.trimEnd();
 const friendId = ref<string>('');
@@ -27,6 +28,12 @@ const socket = io('ws://localhost:3000', {
 const emit = defineEmits(['send-friendId', 'send-older-message']);
 
 const fetchFriendList = async () => {
+	const res = await axios.get<Response<LoginResponse>>(
+		`http://localhost:3000/friend/${userId}`
+	);
+
+	userInfo.value = res.data.data;
+
 	const { data } = await axios.get<Response<FriendList[]>>(
 		`http://localhost:3000/friend/list/${userId}`
 	);
@@ -37,7 +44,6 @@ const fetchFriendList = async () => {
 
 	if (data.data) {
 		friendList.value = data.data;
-		userInfo.value = data.data[0].user;
 	}
 };
 
