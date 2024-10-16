@@ -142,7 +142,7 @@ watch(oldMessageRef, async () => {
 				<div class="avatar">
 					<img
 						src="https://api.multiavatar.com/Starcrasher.svg"
-						alt="aa"
+						alt="ava"
 						class="max-h-[6vh] mr-5"
 					/>
 				</div>
