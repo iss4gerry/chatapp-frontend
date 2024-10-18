@@ -71,12 +71,16 @@ const shuffleAvatar = () => {
 <template>
 	<div class="h-screen w-screen flex items-center justify-center">
 		<div class="h-[50vh] w-[60vw] flex flex-col items-center justify-center">
-			<h1 class="text-2xl font-bold text-white text-center mb-4">
+			<h1 class="text-2xl font-semibold text-white text-center mb-4">
 				Select your avatar
 			</h1>
-			<div class="flex flex-wrap justify-center items-center w-screen p-2">
+			<div
+				class="min-h-[20vh] flex flex-wrap justify-center items-center w-screen p-2"
+			>
 				<div v-for="avatar in avatars" :key="avatar" class="avatar">
-					<div class="w-20 rounded-full overflow-hidden m-4">
+					<div
+						class="w-20 rounded-full overflow-hidden m-4 hover:cursor-pointer hover:border-2 hover:border-white hover:w-24 duration-100"
+					>
 						<img
 							:src="`https://api.multiavatar.com/${avatar}.svg`"
 							alt="Avatar"
