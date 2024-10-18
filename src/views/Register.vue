@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Response, LoginResponse } from '../types/Auth';
 import axios from '../api';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
@@ -57,6 +57,10 @@ const register = async () => {
 	}
 };
 
+onMounted(() => {
+	avatar.value = undefined;
+});
+
 const generateAvatar = () => {
 	return Math.floor(Math.random() * 50) + 1;
 };
@@ -66,10 +70,17 @@ const avatars = ref(Array.from({ length: 6 }, () => generateAvatar()));
 const shuffleAvatar = () => {
 	avatars.value = Array.from({ length: 6 }, () => generateAvatar());
 };
+
+const setAvatar = (id: number) => {
+	avatar.value = id;
+};
 </script>
 
 <template>
-	<div class="h-screen w-screen flex items-center justify-center">
+	<div
+		class="h-screen w-screen flex items-center justify-center"
+		v-if="!avatar"
+	>
 		<div class="h-[50vh] w-[60vw] flex flex-col items-center justify-center">
 			<h1 class="text-2xl font-semibold text-white text-center mb-4">
 				Select your avatar
@@ -79,6 +90,7 @@ const shuffleAvatar = () => {
 			>
 				<div v-for="avatar in avatars" :key="avatar" class="avatar">
 					<div
+						@click="setAvatar(avatar)"
 						class="w-20 rounded-full overflow-hidden m-4 hover:cursor-pointer hover:border-2 hover:border-white hover:w-24 duration-100"
 					>
 						<img
@@ -109,10 +121,7 @@ const shuffleAvatar = () => {
 		</div>
 	</div>
 
-	<div
-		class="flex justify-center items-center w-min-screen h-screen"
-		v-if="avatar"
-	>
+	<div class="flex justify-center items-center w-min-screen h-screen" v-else>
 		<div class="card text-primary-content h-[50vh]">
 			<div class="card-body max-sm:w-[44vh] backdrop-blur-sm">
 				<div class="flex flex-col justify-center items-center space-y-4 w-full">
