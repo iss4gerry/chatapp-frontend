@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 const email = ref<string>();
+const name = ref<string>();
 const username = ref<string>();
 const password = ref<string>();
 const loginRequest = ref<boolean>(false);
@@ -29,10 +30,11 @@ const register = async () => {
 		try {
 			loginRequest.value = true;
 			const { data } = await axios.post<Response<LoginResponse>>(
-				`${baseUrl}/auth/register`,
+				`http://localhost:3000/auth/register`,
 				{
 					email: email.value,
-					name: username.value,
+					name: name.value,
+					username: username.value,
 					password: password.value,
 				}
 			);
@@ -83,7 +85,7 @@ const register = async () => {
 							<span>Please fill all field</span>
 						</div>
 					</div>
-					<h2 class="text-2xl font-semibold">Register</h2>
+					<h2 class="text-2xl font-semibold text-white">Register</h2>
 					<label class="input input-bordered flex items-center gap-2">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -103,6 +105,24 @@ const register = async () => {
 							class="grow w-[25vh]"
 							placeholder="Email"
 							v-model="email"
+						/>
+					</label>
+					<label class="input input-bordered flex items-center gap-2">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 16 16"
+							fill="currentColor"
+							class="h-4 w-4 opacity-70"
+						>
+							<path
+								d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z"
+							/>
+						</svg>
+						<input
+							type="text"
+							class="grow w-[25vh]"
+							placeholder="Name"
+							v-model="name"
 						/>
 					</label>
 					<label class="input input-bordered flex items-center gap-2">
@@ -144,7 +164,7 @@ const register = async () => {
 						/>
 					</label>
 					<button
-						class="btn w-[31vh] bg-accent text-gray-50"
+						class="btn w-[31vh] bg-[#424549] border-[#424549] text-gray-50"
 						:disabled="loginRequest"
 						@click="register"
 					>
@@ -158,8 +178,8 @@ const register = async () => {
 						</div>
 					</button>
 					<div class="flex flex-row items-center justify-center">
-						<p class="text-xs mr-1">Already have an account?</p>
-						<router-link to="login" class="text-xs font-semibold text-gray-500"
+						<p class="text-xs mr-1 text-white">Already have an account?</p>
+						<router-link to="login" class="text-xs font-semibold text-gray-300"
 							>Login</router-link
 						>
 					</div>
