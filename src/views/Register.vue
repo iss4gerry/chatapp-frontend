@@ -5,6 +5,7 @@ import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
+const avatar = ref<number>();
 const email = ref<string>();
 const name = ref<string>();
 const username = ref<string>();
@@ -55,12 +56,61 @@ const register = async () => {
 		wrongPassword.value = true;
 	}
 };
+
+const generateAvatar = () => {
+	return Math.floor(Math.random() * 50) + 1;
+};
+
+const avatars = ref(Array.from({ length: 6 }, () => generateAvatar()));
+
+const shuffleAvatar = () => {
+	avatars.value = Array.from({ length: 6 }, () => generateAvatar());
+};
 </script>
 
 <template>
-	<div class="flex justify-center items-center w-min-screen h-[80vh] -mt-10">
+	<div class="h-screen w-screen flex items-center justify-center">
+		<div class="h-[50vh] w-[60vw] flex flex-col items-center justify-center">
+			<h1 class="text-2xl font-bold text-white text-center mb-4">
+				Select your avatar
+			</h1>
+			<div class="flex flex-wrap justify-center items-center w-screen p-2">
+				<div v-for="avatar in avatars" :key="avatar" class="avatar">
+					<div class="w-20 rounded-full overflow-hidden m-4">
+						<img
+							:src="`https://api.multiavatar.com/${avatar}.svg`"
+							alt="Avatar"
+						/>
+					</div>
+				</div>
+			</div>
+			<div class="mt-10 hover:cursor-pointer" @click="shuffleAvatar">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="20"
+					height="20"
+					fill="white"
+					class="bi bi-shuffle"
+					viewBox="0 0 16 16"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.6 9.6 0 0 0 7.556 8a9.6 9.6 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.6 10.6 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.6 9.6 0 0 0 6.444 8a9.6 9.6 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5"
+					/>
+					<path
+						d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192"
+					/>
+				</svg>
+			</div>
+		</div>
+	</div>
+
+	<div
+		class="flex justify-center items-center w-min-screen h-screen"
+		v-if="avatar"
+	>
 		<div class="card text-primary-content h-[50vh]">
-			<div class="card-body max-sm:w-[44vh] backdrop-blur-sm mt-10">
+			<div class="card-body max-sm:w-[44vh] backdrop-blur-sm">
 				<div class="flex flex-col justify-center items-center space-y-4 w-full">
 					<div class="flex flex-col items-center justify-center">
 						<div
