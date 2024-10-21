@@ -64,7 +64,7 @@ const loginButton = async () => {
 			localStorage.setItem('token', bearerToken);
 			localStorage.setItem('userId', userId.value);
 
-			router.push('/')
+			router.push('/');
 		}
 	} catch (error: any) {
 		if (error.response) {
@@ -122,7 +122,7 @@ const loginAsGuest = async () => {
 </script>
 
 <template>
-	<div class="flex justify-center items-center w-screen h-screen ">
+	<div class="flex justify-center items-center w-screen h-screen">
 		<div class="card text-primary-content h-[50vh]">
 			<div class="max-sm:flex max-sm:justify-center max-sm:items-center">
 				<div
@@ -131,12 +131,12 @@ const loginAsGuest = async () => {
 					:class="{ 'animate__fadeOutUp animate__delay-s': alertStatus }"
 					v-if="wrongPassword"
 				>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-6 w-6 shrink-0 stroke-current"
-							fill="none"
-							viewBox="0 0 24 24"
-						>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-6 w-6 shrink-0 stroke-current"
+						fill="none"
+						viewBox="0 0 24 24"
+					>
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -167,7 +167,7 @@ const loginAsGuest = async () => {
 							d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
 						/>
 					</svg>
-					<span>Error! Please fill all field.</span>
+					<span>Please fill in all required fields</span>
 				</div>
 			</div>
 			<div class="card-body max-sm:w-[44vh] backdrop-blur-sm mt-10">
@@ -245,7 +245,9 @@ const loginAsGuest = async () => {
 					</div>
 					<div class="divider text-xs text-white">Or sign with</div>
 					<div class="flex flex-row flex-wrap w-[30vh] justify-between">
-						<button class="btn w-[14vh] bg-[#424549] border-[#424549] text-gray-50" >
+						<button
+							class="btn w-[14vh] bg-[#424549] border-[#424549] text-gray-50"
+						>
 							Google
 						</button>
 						<button
@@ -267,5 +269,4 @@ const loginAsGuest = async () => {
 			</div>
 		</div>
 	</div>
-
 </template>
