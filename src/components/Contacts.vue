@@ -90,15 +90,6 @@ const accFriendRequest = async (id: string) => {
 
 const requestAddFrined = async () => {
 	try {
-		if (
-			friendList.value?.map(
-				(ele) => ele.friendId === searchFriendData.value?.id
-			)
-		) {
-			addFriendStatus.value = 'This user is already on your friend list';
-			console.log(addFriendStatus.value);
-			return;
-		}
 		const { data } = await axios.post<Response<AddFriend>>(
 			`http://localhost:3000/friend/add`,
 			{
@@ -298,9 +289,8 @@ onMounted(() => {
 							<h1 class="text-sm text-white">
 								{{ '@' + searchFriendData?.username }}
 							</h1>
-							<div v-if="searchFriendData.id === userId"></div>
 							<div
-								v-else-if="
+								v-if="
 									addFriendStatus === 'This user is already on your friend list'
 								"
 							>
@@ -353,10 +343,10 @@ onMounted(() => {
 						/>
 						<div class="flex flex-col w-[12vh]">
 							<h1 class="text-white ml-4 font-semibold opacity-95 text-sm">
-								{{ item.friend.name }} }
+								{{ item.user.name }}
 							</h1>
 							<h1 class="text-gray-200 ml-4 font-semibold opacity-95 text-xs">
-								{{ item.friend.username }}
+								{{ item.user.username }}
 							</h1>
 						</div>
 						<svg
