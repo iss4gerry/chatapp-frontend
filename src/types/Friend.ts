@@ -13,11 +13,13 @@ export type FriendList = {
 	updatedAt: Date;
 	friend: {
 		name: string;
+		avatar: number;
 		username: string;
 		id: string;
 	};
 	user: {
 		name: string;
+		avatar: number;
 		username: string;
 	};
 };
@@ -33,6 +35,7 @@ export type AddFriend = {
 
 export type SearchFriend = {
 	id: string;
+	avatar: number;
 	name: string;
 	username: string;
 	email: string;

@@ -181,7 +181,7 @@ onMounted(() => {
 					class="flex flex-row p-3 bg-[#424549] h-[10vh] lg:min-w-[22vw] mt-4 items-center rounded-xl max-sm:w-[90vw] max-sm:h-[10vh] max-md:w-[90vw] max-lg:w-[85vw] max-lg:h-[15vh] hover:cursor-pointer hover:bg-[#3a3d41] hover:shadow-lg"
 				>
 					<img
-						src="https://api.multiavatar.com/Binx Bond.svg"
+						:src="`https://api.multiavatar.com/${item.friend.avatar} .svg`"
 						alt="ava"
 						class="lg:max-h-20 mr-10 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2 max-lg:h-[10vh] w-[8vh] xl:ml-2"
 					/>
@@ -281,7 +281,7 @@ onMounted(() => {
 							class="flex flex-col justify-center items-center"
 						>
 							<img
-								src="https://api.multiavatar.com/Binx Bond.svg"
+								:src="`https://api.multiavatar.com/${searchFriendData.avatar} .svg`"
 								alt="ava"
 								class="lg:max-h-20 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2 max-lg:h-[10vh] w-[8vh]"
 							/>
@@ -339,7 +339,7 @@ onMounted(() => {
 						class="flex flex-row bg-[#36393e] p-2 justify-start items-center rounded-xl mt-2"
 					>
 						<img
-							src="https://api.multiavatar.com/Binx Bond.svg"
+							:src="`https://api.multiavatar.com/${item.user.avatar} .svg`"
 							alt="ava"
 							class="h-[6vh]"
 						/>
