@@ -16,6 +16,7 @@ const props = defineProps<{
 	friendId: string | undefined;
 	friendName: string | undefined;
 	friendUsername: string | undefined;
+	friendAvatar: number | undefined;
 	oldMessage: Message[] | undefined;
 }>();
 
@@ -141,7 +142,7 @@ watch(oldMessageRef, async () => {
 			<div class="user-details flex items-center gap-4">
 				<div class="avatar">
 					<img
-						src="https://api.multiavatar.com/Starcrasher.svg"
+						:src="`https://api.multiavatar.com/${friendAvatar} .svg`"
 						alt="ava"
 						class="max-h-[6vh] mr-5"
 					/>

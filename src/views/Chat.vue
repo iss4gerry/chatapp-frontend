@@ -5,14 +5,21 @@ import Contacts from '../components/Contacts.vue';
 import { Message } from '../types/Message';
 
 const friendId = ref<string>();
+const avatar = ref<number>();
 const friendName = ref<string>();
 const friendUsername = ref<string>();
 const oldMessage = ref<Message[]>();
 
-const setFriendId = (id: string, name: string, username: string) => {
+const setFriendId = (
+	id: string,
+	name: string,
+	username: string,
+	friendAvatar: number
+) => {
 	friendId.value = id;
 	friendName.value = name;
 	friendUsername.value = username;
+	avatar.value = friendAvatar;
 };
 
 const sendOlderMessage = (message: Message[]) => {
@@ -31,6 +38,7 @@ const sendOlderMessage = (message: Message[]) => {
 			/>
 			<ChatContainer
 				class="max-lg:hidden"
+				:friend-avatar="avatar"
 				:friend-id="friendId"
 				:old-message="oldMessage"
 				:friend-name="friendName"

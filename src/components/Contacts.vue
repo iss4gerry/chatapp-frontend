@@ -49,11 +49,16 @@ const fetchFriendList = async () => {
 	}
 };
 
-const friendData = async (id: string, friendName: string, username: string) => {
+const friendData = async (
+	id: string,
+	friendName: string,
+	username: string,
+	avatar: number
+) => {
 	friendId.value = id;
 
 	const roomId = `${[userId, friendId.value].sort().join('')}`;
-	emit('send-friendId', friendId.value, friendName, username);
+	emit('send-friendId', friendId.value, friendName, username, avatar);
 	const message = await axios.get<Response<Message[]>>(
 		`http://localhost:3000/message/${roomId}`
 	);
@@ -176,7 +181,12 @@ onMounted(() => {
 			<div v-for="(item, index) in friendList" :key="index">
 				<div
 					@click="
-						friendData(item.friendId, item.friend.name, item.friend.username)
+						friendData(
+							item.friendId,
+							item.friend.name,
+							item.friend.username,
+							item.friend.avatar
+						)
 					"
 					class="flex flex-row p-3 bg-[#424549] h-[10vh] lg:min-w-[22vw] mt-4 items-center rounded-xl max-sm:w-[90vw] max-sm:h-[10vh] max-md:w-[90vw] max-lg:w-[85vw] max-lg:h-[15vh] hover:cursor-pointer hover:bg-[#3a3d41] hover:shadow-lg"
 				>
