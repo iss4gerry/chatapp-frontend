@@ -10,7 +10,7 @@ export type LoginResponse = {
 	username: string;
 	email: string;
 	password: string;
-	avatar: string;
+	avatar: number;
 	createdAt: string;
 	updatedAt: string;
 	isEmailVerified: boolean;

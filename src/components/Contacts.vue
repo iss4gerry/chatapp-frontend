@@ -19,6 +19,7 @@ const pendingRequest = ref<FriendList[]>();
 const userInfo = ref<{
 	name: string;
 	username: string;
+	avatar: number;
 }>();
 const activeTab = ref<string>('add');
 
@@ -33,6 +34,7 @@ const fetchFriendList = async () => {
 	);
 
 	userInfo.value = res.data.data;
+	console.log(userInfo.value?.avatar);
 
 	const { data } = await axios.get<Response<FriendList[]>>(
 		`http://localhost:3000/friend/list/${userId}`
@@ -194,7 +196,7 @@ onMounted(() => {
 		>
 			<div class="avatar online ml-4">
 				<div class="w-11 rounded-full">
-					<img src="https://api.multiavatar.com/fea21f4c.svg" />
+					<img :src="`https://api.multiavatar.com/${userInfo?.avatar} .svg`" />
 				</div>
 			</div>
 			<div class="flex flex-col ml-4">

@@ -34,6 +34,7 @@ const register = async () => {
 				`http://localhost:3000/auth/register`,
 				{
 					email: email.value,
+					avatar: avatar.value,
 					name: name.value,
 					username: username.value,
 					password: password.value,
