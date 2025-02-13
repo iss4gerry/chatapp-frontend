@@ -4,7 +4,6 @@ import axios from '../api';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-const baseUrl = import.meta.env.VITE_BACKEND_URL;
 const avatar = ref<number>();
 const email = ref<string>();
 const name = ref<string>();
@@ -13,6 +12,8 @@ const password = ref<string>();
 const loginRequest = ref<boolean>(false);
 const wrongPassword = ref<boolean>(false);
 const alertStatus = ref<boolean>(false);
+
+const BASE_URL = import.meta.env.VITE_BE_URL;
 
 const router = useRouter();
 
@@ -31,7 +32,7 @@ const register = async () => {
 		try {
 			loginRequest.value = true;
 			const { data } = await axios.post<Response<LoginResponse>>(
-				`http://localhost:3000/auth/register`,
+				`${BASE_URL}/auth/register`,
 				{
 					email: email.value,
 					avatar: avatar.value,
@@ -95,7 +96,7 @@ const setAvatar = (id: number) => {
 						class="w-20 rounded-full overflow-hidden m-4 hover:cursor-pointer hover:border-2 hover:border-white hover:w-24 duration-100"
 					>
 						<img
-							:src="`https://api.multiavatar.com/${avatar}.svg`"
+							:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${avatar}`"
 							alt="Avatar"
 						/>
 					</div>

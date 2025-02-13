@@ -23,21 +23,23 @@ const userInfo = ref<{
 }>();
 const activeTab = ref<string>('add');
 
-const socket = io('ws://localhost:3000', {
+const BASE_URL = import.meta.env.VITE_BE_URL;
+const WS_URL = BASE_URL.replace(/^https?:\/\//, '');
+
+const socket = io(`ws://${WS_URL}`, {
 	query: { userId },
 });
 const emit = defineEmits(['send-friendId', 'send-older-message']);
 
 const fetchFriendList = async () => {
 	const res = await axios.get<Response<LoginResponse>>(
-		`http://localhost:3000/friend/${userId}`
+		`${BASE_URL}/friend/${userId}`
 	);
 
 	userInfo.value = res.data.data;
-	console.log(userInfo.value?.avatar);
 
 	const { data } = await axios.get<Response<FriendList[]>>(
-		`http://localhost:3000/friend/list/${userId}`
+		`${BASE_URL}/friend/list/${userId}`
 	);
 
 	if (data.data?.length === 0) {
@@ -60,7 +62,7 @@ const friendData = async (
 	const roomId = `${[userId, friendId.value].sort().join('')}`;
 	emit('send-friendId', friendId.value, friendName, username, avatar);
 	const message = await axios.get<Response<Message[]>>(
-		`http://localhost:3000/message/${roomId}`
+		`${BASE_URL}/message/${roomId}`
 	);
 
 	socket.emit('joinRoom', roomId);
@@ -78,7 +80,7 @@ const changeActiveTab = (tab: string) => {
 
 const getIncommingRequest = async () => {
 	const { data } = await axios.get<Response<FriendList[]>>(
-		`http://localhost:3000/friend/pending/${userId}`
+		`${BASE_URL}/friend/pending/${userId}`
 	);
 
 	pendingRequest.value = data.data;
@@ -87,7 +89,7 @@ const getIncommingRequest = async () => {
 
 const accFriendRequest = async (id: string) => {
 	try {
-		const { data } = await axios.patch(`http://localhost:3000/friend/accept`, {
+		const { data } = await axios.patch(`${BASE_URL}/friend/accept`, {
 			id: id,
 		});
 
@@ -98,7 +100,7 @@ const accFriendRequest = async (id: string) => {
 const requestAddFrined = async () => {
 	try {
 		const { data } = await axios.post<Response<AddFriend>>(
-			`http://localhost:3000/friend/add`,
+			`${BASE_URL}/friend/add`,
 			{
 				userId: userId,
 				friendId: searchFriendData.value?.id,
@@ -117,7 +119,7 @@ const searchFriend = async () => {
 		addFriendLoading.value = true;
 		friendNotFound.value = false;
 		const { data } = await axios.get<Response<SearchFriend>>(
-			`http://localhost:3000/friend/search/${searchFriendId.value}`
+			`${BASE_URL}/friend/search/${searchFriendId.value}`
 		);
 
 		if (data.data === null) {
@@ -191,7 +193,7 @@ onMounted(() => {
 					class="flex flex-row p-3 bg-[#424549] h-[10vh] lg:min-w-[22vw] mt-4 items-center rounded-xl max-sm:w-[90vw] max-sm:h-[10vh] max-md:w-[90vw] max-lg:w-[85vw] max-lg:h-[15vh] hover:cursor-pointer hover:bg-[#3a3d41] hover:shadow-lg"
 				>
 					<img
-						:src="`https://api.multiavatar.com/${item.friend.avatar} .svg`"
+						:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${item.friend.avatar}`"
 						alt="ava"
 						class="lg:max-h-20 mr-10 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2 max-lg:h-[10vh] w-[8vh] xl:ml-2"
 					/>
@@ -206,7 +208,9 @@ onMounted(() => {
 		>
 			<div class="avatar online ml-4">
 				<div class="w-11 rounded-full">
-					<img :src="`https://api.multiavatar.com/${userInfo?.avatar} .svg`" />
+					<img
+						:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${userInfo?.avatar}`"
+					/>
 				</div>
 			</div>
 			<div class="flex flex-col ml-4">
@@ -291,7 +295,8 @@ onMounted(() => {
 							class="flex flex-col justify-center items-center"
 						>
 							<img
-								:src="`https://api.multiavatar.com/${searchFriendData.avatar} .svg`"
+								crossorigin="anonymous"
+								:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${searchFriendData.avatar}`"
 								alt="ava"
 								class="lg:max-h-20 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2 max-lg:h-[10vh] w-[8vh]"
 							/>
@@ -349,7 +354,8 @@ onMounted(() => {
 						class="flex flex-row bg-[#36393e] p-2 justify-start items-center rounded-xl mt-2"
 					>
 						<img
-							:src="`https://api.multiavatar.com/${item.user.avatar} .svg`"
+							crossorigin="anonymous"
+							:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${item.user.avatar}`"
 							alt="ava"
 							class="h-[6vh]"
 						/>

@@ -5,6 +5,9 @@ import axios from '../api/index';
 import { Response } from '../types/Friend';
 import { Message, NewMessagePayload, RoomResponse } from '../types/Message';
 
+const BASE_URL = import.meta.env.VITE_BE_URL;
+const WS_URL = BASE_URL.replace(/^https?:\/\//, '');
+
 const chats = ref<{ senderId: string; message: string; dateTime: string }[]>(
 	[]
 );
@@ -25,7 +28,7 @@ const oldMessageRef = toRef(props, 'oldMessage');
 
 import { io } from 'socket.io-client';
 
-const socket = io('ws://localhost:3000', {
+const socket = io(`ws://${WS_URL}`, {
 	query: { userId },
 });
 
@@ -43,18 +46,15 @@ const sendMessage = async (message: string) => {
 			scrollTarget.value.scrollIntoView({ behavior: 'smooth' });
 		}
 		const { data } = await axios.get<Response<RoomResponse>>(
-			`http://localhost:3000/message/room/${roomId}`
+			`${BASE_URL}/message/room/${roomId}`
 		);
 
 		if (data.data === null) {
-			await axios.post<Response<RoomResponse>>(
-				'http://localhost:3000/message/room/add',
-				{
-					roomId: roomId,
-					user1Id: userId,
-					user2Id: props.friendId,
-				}
-			);
+			await axios.post<Response<RoomResponse>>(`${BASE_URL}/message/room/add`, {
+				roomId: roomId,
+				user1Id: userId,
+				user2Id: props.friendId,
+			});
 		}
 
 		socket.emit('joinRoom', roomId);
@@ -142,7 +142,7 @@ watch(oldMessageRef, async () => {
 			<div class="user-details flex items-center gap-4">
 				<div class="avatar">
 					<img
-						:src="`https://api.multiavatar.com/${friendAvatar} .svg`"
+						:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${friendAvatar}`"
 						alt="ava"
 						class="max-h-[6vh] mr-5"
 					/>

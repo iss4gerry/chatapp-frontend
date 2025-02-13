@@ -4,7 +4,6 @@ import axios from '../api';
 import { Response, LoginResponse } from '../types/Auth';
 import { useRouter } from 'vue-router';
 
-const baseUrl = import.meta.env.VITE_BACKEND_URL;
 const loginRequest = ref<boolean>(false);
 const loginGuestRequest = ref<boolean>(false);
 const invalidField = ref<boolean>(false);
@@ -15,6 +14,8 @@ const wrongPassword = ref<boolean>(false);
 const alertStatus = ref<boolean>(false);
 const userId = ref<string>();
 const router = useRouter();
+
+const BASE_URL = import.meta.env.VITE_BE_URL;
 
 watch(wrongPassword, () => {
 	setTimeout(() => {
@@ -44,7 +45,7 @@ const loginButton = async () => {
 	try {
 		loginRequest.value = true;
 		const res = await axios.post<Response<LoginResponse>>(
-			`${baseUrl}/auth/login`,
+			`${BASE_URL}/auth/login`,
 			{
 				email: String(email.value),
 				password: String(password.value),
@@ -93,7 +94,7 @@ const loginAsGuest = async () => {
 	try {
 		loginGuestRequest.value = true;
 		const res = await axios.post<Response<LoginResponse>>(
-			`${baseUrl}/auth/register`,
+			`${BASE_URL}/auth/register`,
 			{
 				email: generateRandomGuestName() + '@gmail.com',
 				name: generateRandomGuestName(),
