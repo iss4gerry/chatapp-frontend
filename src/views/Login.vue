@@ -4,6 +4,8 @@ import axios from '../api';
 import { Response, LoginResponse } from '../types/Auth';
 import { useRouter } from 'vue-router';
 
+import * as CryptoJS from 'crypto-js';
+
 const loginRequest = ref<boolean>(false);
 const loginGuestRequest = ref<boolean>(false);
 const invalidField = ref<boolean>(false);
@@ -62,8 +64,16 @@ const loginButton = async () => {
 		if (token) {
 			const bearerToken = token.split(' ')[1];
 
-			localStorage.setItem('token', bearerToken);
-			localStorage.setItem('userId', userId.value);
+			const encryptedToken = CryptoJS.AES.encrypt(
+				bearerToken,
+				import.meta.env.VITE_SECRET_KEY
+			).toString();
+			const encryptedUserId = CryptoJS.AES.encrypt(
+				userId.value,
+				import.meta.env.VITE_SECRET_KEY
+			).toString();
+			localStorage.setItem('token', encryptedToken);
+			localStorage.setItem('userId', encryptedUserId);
 
 			router.push('/');
 		}
@@ -108,8 +118,17 @@ const loginAsGuest = async () => {
 		if (token) {
 			const bearerToken = token.split(' ')[1];
 
-			localStorage.setItem('token', bearerToken);
-			localStorage.setItem('userId', userId.value);
+			const encryptedToken = CryptoJS.AES.encrypt(
+				bearerToken,
+				import.meta.env.VITE_SECRET_KEY
+			).toString();
+			const encryptedUserId = CryptoJS.AES.encrypt(
+				userId.value,
+				import.meta.env.VITE_SECRET_KEY
+			).toString();
+			localStorage.setItem('token', encryptedToken);
+			localStorage.setItem('userId', encryptedUserId);
+
 			router.push('profile/create');
 		}
 	} catch (error) {

@@ -5,8 +5,15 @@ import { AddFriend, FriendList, Response, SearchFriend } from '../types/Friend';
 import { Message } from '../types/Message';
 import { io } from 'socket.io-client';
 import { LoginResponse } from '../types/Auth';
+import * as CryptoJS from 'crypto-js';
 
-const userId = localStorage.getItem('userId')?.trimEnd();
+const encryptedUserId: string = localStorage.getItem('userId')!;
+const userId: string = CryptoJS.AES.decrypt(
+	encryptedUserId,
+	import.meta.env.VITE_SECRET_KEY
+)
+	.toString(CryptoJS.enc.Utf8)
+	.trimEnd();
 const friendId = ref<string>('');
 const addFriendStatus = ref<string>();
 const friendList = ref<FriendList[]>();

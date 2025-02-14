@@ -10,10 +10,12 @@
 	},
 	"dependencies": {
 		"@codekraft-studio/vue-autoscroll": "^0.1.1",
+		"@types/crypto-js": "^4.2.2",
 		"@vueuse/core": "^11.1.0",
 		"animate.css": "^4.1.1",
 		"axios": "^1.7.7",
 		"axios-retry": "^4.5.0",
+		"crypto-js": "^4.2.0",
 		"gsap": "^3.12.5",
 		"postcss": "^8.4.47",
 		"socket.io-client": "^4.8.0",

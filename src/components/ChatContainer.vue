@@ -4,6 +4,7 @@ import ChatInput from './ChatInput.vue';
 import axios from '../api/index';
 import { Response } from '../types/Friend';
 import { Message, NewMessagePayload, RoomResponse } from '../types/Message';
+import * as CryptoJS from 'crypto-js';
 
 const BASE_URL = import.meta.env.VITE_BE_URL;
 const WS_URL = BASE_URL.replace(/^https?:\/\//, '');
@@ -14,7 +15,14 @@ const chats = ref<{ senderId: string; message: string; dateTime: string }[]>(
 
 const friendStatus = ref<boolean>();
 const scrollTarget = ref<HTMLElement | null>(null);
-const userId = localStorage.getItem('userId')?.trimEnd();
+const encryptedUserId: string = localStorage.getItem('userId')!;
+const userId: string = CryptoJS.AES.decrypt(
+	encryptedUserId,
+	import.meta.env.VITE_SECRET_KEY
+)
+	.toString(CryptoJS.enc.Utf8)
+	.trimEnd();
+
 const props = defineProps<{
 	friendId: string | undefined;
 	friendName: string | undefined;
