@@ -47,7 +47,7 @@ const loginButton = async () => {
 	try {
 		loginRequest.value = true;
 		const res = await axios.post<Response<LoginResponse>>(
-			`${BASE_URL}/auth/login`,
+			`${BASE_URL}/auth/login/`,
 			{
 				email: String(email.value),
 				password: String(password.value),
