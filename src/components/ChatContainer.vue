@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, nextTick, toRef } from 'vue';
+import { ref, watch, nextTick, toRef, defineEmits } from 'vue';
 import ChatInput from './ChatInput.vue';
 import axios from '../api/index';
 import { Response } from '../types/Friend';
@@ -15,6 +15,7 @@ const chats = ref<{ senderId: string; message: string; dateTime: string }[]>(
 
 const friendStatus = ref<boolean>();
 const scrollTarget = ref<HTMLElement | null>(null);
+const emit = defineEmits(['updateFriend']);
 const encryptedUserId: string = localStorage.getItem('userId')!;
 const userId: string = CryptoJS.AES.decrypt(
 	encryptedUserId,
@@ -137,6 +138,10 @@ watch(oldMessageRef, async () => {
 		scrollTarget.value.scrollIntoView();
 	}
 });
+
+function backHandler() {
+	emit('updateFriend', null);
+}
 </script>
 
 <template>
@@ -148,11 +153,25 @@ watch(oldMessageRef, async () => {
 			class="chat-header flex justify-between items-center px-8 min-h-[8vh] max-h-[8vh] bg-[#36393e]"
 		>
 			<div class="user-details flex items-center gap-4">
+				<svg
+					@click="backHandler"
+					xmlns="http://www.w3.org/2000/svg"
+					width="32"
+					height="32"
+					fill="white"
+					class="bi bi-arrow-left-short hover:cursor-pointer"
+					viewBox="0 0 16 16"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"
+					/>
+				</svg>
 				<div class="avatar">
 					<img
 						:src="`https://api.dicebear.com/9.x/lorelei/svg?seed=${friendAvatar}`"
 						alt="ava"
-						class="max-h-[6vh] mr-5"
+						class="max-h-[6vh]"
 					/>
 				</div>
 				<div class="username flex flex-col">

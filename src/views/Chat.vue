@@ -25,6 +25,10 @@ const setFriendId = (
 const sendOlderMessage = (message: Message[]) => {
 	oldMessage.value = message;
 };
+
+const backHandler = () => {
+	friendId.value = undefined;
+};
 </script>
 
 <template>
@@ -38,6 +42,7 @@ const sendOlderMessage = (message: Message[]) => {
 			/>
 			<ChatContainer
 				class="max-lg:hidden"
+				v-on:updateFriend="backHandler"
 				:friend-avatar="avatar"
 				:friend-id="friendId"
 				:old-message="oldMessage"
