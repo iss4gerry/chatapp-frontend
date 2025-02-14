@@ -91,17 +91,18 @@ const getIncommingRequest = async () => {
 	);
 
 	pendingRequest.value = data.data;
-	console.log(pendingRequest.value);
 };
 
 const accFriendRequest = async (id: string) => {
 	try {
-		const { data } = await axios.patch(`${BASE_URL}/friend/accept`, {
+		await axios.patch(`${BASE_URL}/friend/accept`, {
 			id: id,
 		});
 
 		await fetchFriendList();
-	} catch (error) {}
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 const requestAddFrined = async () => {
@@ -200,7 +201,7 @@ onMounted(() => {
 					class="flex flex-row p-3 bg-[#424549] h-[10vh] lg:min-w-[22vw] mt-4 items-center rounded-xl max-sm:w-[90vw] max-sm:h-[10vh] max-md:w-[90vw] max-lg:w-[85vw] max-lg:h-[15vh] hover:cursor-pointer hover:bg-[#3a3d41] hover:shadow-lg"
 				>
 					<img
-						:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${item.friend.avatar}`"
+						:src="`https://api.dicebear.com/9.x/lorelei/svg?seed=${item.friend.avatar}`"
 						alt="ava"
 						class="lg:max-h-20 mr-10 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2 max-lg:h-[10vh] w-[8vh] xl:ml-2"
 					/>
@@ -216,7 +217,7 @@ onMounted(() => {
 			<div class="avatar online ml-4">
 				<div class="w-11 rounded-full">
 					<img
-						:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${userInfo?.avatar}`"
+						:src="`https://api.dicebear.com/9.x/lorelei/svg?seed=${userInfo?.avatar}`"
 					/>
 				</div>
 			</div>
@@ -303,7 +304,7 @@ onMounted(() => {
 						>
 							<img
 								crossorigin="anonymous"
-								:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${searchFriendData.avatar}`"
+								:src="`https://api.dicebear.com/9.x/lorelei/svg?seed=${searchFriendData.avatar}`"
 								alt="ava"
 								class="lg:max-h-20 max-sm:h-[7vh] max-sm:mr-6 max-sm:ml-2 max-lg:h-[10vh] w-[8vh]"
 							/>
@@ -362,7 +363,7 @@ onMounted(() => {
 					>
 						<img
 							crossorigin="anonymous"
-							:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${item.user.avatar}`"
+							:src="`https://api.dicebear.com/9.x/lorelei/svg?seed=${item.user.avatar}`"
 							alt="ava"
 							class="h-[6vh]"
 						/>

@@ -150,7 +150,7 @@ watch(oldMessageRef, async () => {
 			<div class="user-details flex items-center gap-4">
 				<div class="avatar">
 					<img
-						:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${friendAvatar}`"
+						:src="`https://api.dicebear.com/9.x/lorelei/svg?seed=${friendAvatar}`"
 						alt="ava"
 						class="max-h-[6vh] mr-5"
 					/>

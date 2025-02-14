@@ -96,7 +96,7 @@ const setAvatar = (id: number) => {
 						class="w-20 rounded-full overflow-hidden m-4 hover:cursor-pointer hover:border-2 hover:border-white hover:w-24 duration-100"
 					>
 						<img
-							:src="`https://api.dicebear.com/9.x/avataaars/svg?seed=${avatar}`"
+							:src="`https://api.dicebear.com/9.x/lorelei/svg?seed=${avatar}`"
 							alt="Avatar"
 						/>
 					</div>
